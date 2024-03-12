@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YouTube Video Search</title>
+</head>
+<body>
+    <h2>YouTube Video Search</h2>
+    <form method="get">
+        <label for="query">Enter search query:</label>
+        <input type="text" id="query" name="query">
+        <button type="submit">Search</button>
+    </form>
+
+    <div id="searchResults"></div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            searchYouTubeVideos(document.getElementById('query').value);
+        });
+
+
+
+
+
+ //FUNCTION TO SEARCH VIDEOS ON YOUTUBE
+ 
+ 
+    function searchYouTubeVideos(query) {
+    const apiKey = 'AIzaSyDAe6zr7tcl8d87TMS3GPr9I8klNGSBA40';
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?q=${query}&part=snippet&maxResults=10&type=video&key=${apiKey}`;
+
+    fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('searchResults').innerHTML = '';
+
+        if (data && data.items) {
+            const results = data.items;
+            const list = document.createElement('ul');
+
+            results.forEach(item => {
+                const title = item.snippet.title;
+                const videoId = item.id.videoId;
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `javascript:void(0)`;
+                link.onclick = function() {
+                    downloadVideo(videoId);
+                };
+                link.textContent = title;
+                listItem.appendChild(link);
+                list.appendChild(listItem);
+            });
+
+            document.getElementById('searchResults').appendChild(list);
+        } else {
+            document.getElementById('searchResults').textContent = 'No search results found.';
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+//function to download video using pytube
+        function downloadVideo(videoId) {
+            fetch('/download', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ videoId: videoId })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Video download started.');
+                } else {
+                    console.error('Error starting video download.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
