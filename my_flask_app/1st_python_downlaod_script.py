@@ -4,9 +4,9 @@ from pytube import YouTube
 # YouTube video URLs to download
 video_urls = [
 
-            "https://youtu.be/DH4ugAjuCHA",
-            "https://youtu.be/ubkwRMq50p8",
-            "https://youtu.be/ENVW3uZ3a-4",
+            "https://youtu.be/xxxxxxxxxxx",
+            "https://youtu.be/xxxxxxxxxxx",
+            "https://youtu.be/xxxxxxxxxxx",
             ""
             "",
     #video_url_here
